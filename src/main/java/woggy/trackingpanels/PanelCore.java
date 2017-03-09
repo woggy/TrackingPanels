@@ -1,16 +1,19 @@
 package woggy.trackingpanels;
 
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = PanelCore.MODID, version = PanelCore.VERSION)
 public class PanelCore
@@ -22,6 +25,13 @@ public class PanelCore
     
     @Instance(value = PanelCore.MODID)
     public static PanelCore instance;
+    
+    public static Block blockSmallPanel;
+    public static Block blockAxle;
+    public static Block blockAxleMount;
+    
+    public static Item itemAxle;
+    public static Item itemSmallPanel;
 
     public static final CreativeTabs creativeTab = new CreativeTabs("TrackingPanels")
     {
@@ -41,7 +51,9 @@ public class PanelCore
     @EventHandler
     public void load(FMLInitializationEvent event)
     {
-		
+    	this.tileEntityRegistration();
+		this.itemAndBlockRegistration();
+		this.addRecipes();
     }
     
     @EventHandler
@@ -64,5 +76,34 @@ public class PanelCore
 			System.out.println("Steam fluid not found in fluid registry!");
     	else
     		System.out.println("Steam fluid found in fluid registry!");
+    }
+    
+    public void tileEntityRegistration()
+    {
+    	ClientRegistry.bindTileEntitySpecialRenderer(BlockAxleTileEntity.class, new AxleRenderer());
+    	GameRegistry.registerTileEntity(BlockAxleTileEntity.class, "axle");
+
+    	ClientRegistry.bindTileEntitySpecialRenderer(BlockSmallPanelTileEntity.class, new SmallPanelRenderer());
+    	GameRegistry.registerTileEntity(BlockSmallPanelTileEntity.class, "smallPanel");
+    }
+    
+    public void itemAndBlockRegistration()
+    {
+    	blockSmallPanel = new BlockSmallPanel();
+    	GameRegistry.registerBlock(blockSmallPanel, "BlockSmallPanel");
+    	blockAxle = new BlockAxle();
+    	GameRegistry.registerBlock(blockAxle, "BlockAxle");
+    	blockAxleMount = new BlockAxleMount();
+    	GameRegistry.registerBlock(blockAxleMount, "BlockAxleMount");
+    	
+    	itemAxle = new ItemAxle();
+    	GameRegistry.registerItem(itemAxle, "ItemAxle");
+    	itemSmallPanel = new ItemSmallPanel();
+    	GameRegistry.registerItem(itemSmallPanel, "ItemSmallPanel");
+    }
+    
+    public void addRecipes()
+    {
+    	
     }
 }
