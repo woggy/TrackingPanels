@@ -1,0 +1,80 @@
+import groovy.json.JsonSlurper
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+apply plugin: 'forge'
+
+// Load mcmod.info into config
+for(srcDir in sourceSets.main.resources.srcDirs) {
+	def configFile = file "${srcDir}/mcmod.info"
+	
+	configFile.withReader {
+		def json = new JsonSlurper().parse it
+		project.ext.config = new ConfigObject()
+		project.ext.config.putAll json[0]
+		project.version = config.version
+	}
+}
+
+group= config.namespace
+archivesBaseName = config.modid + "-" + config.mcversion.tokenize('-')[1]
+
+minecraft {
+    version = config.mcversion
+    runDir = "eclipse"
+    
+ 
+    // replacing
+    replace "@NAME@", config.name
+    replace "@VERSION@", config.version
+    replaceIn "TrackingPanels.java"   
+}
+
+repositories {
+        maven {
+        	name = "Chickenbones"
+        	url = "http://chickenbones.net/maven"
+        }
+}
+
+dependencies {
+    // you may put jars on which you depend on in ./libs
+    // or you may define them like so..
+    //compile "some.group:artifact:version:classifier"
+    //compile "some.group:artifact:version"
+      
+    compile "codechicken:CodeChickenLib:1.7.10-1.1.3.138:dev"
+    compile "codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev"
+    compile "codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev"
+    
+    compile fileTree(dir: 'libs', include: '*.jar')
+
+    // for more info...
+    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+}
+
+processResources
+{
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs)
+}

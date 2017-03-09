@@ -1,0 +1,16 @@
+[
+{
+  "modid": "trackingpanels",
+  "name": "TrackingPanels",
+  "description": "Sun-tracking solar arrays",
+  "version": "0.1",
+  "mcversion": "10.13.4.1558-1.7.10",
+  "url": "https://github.com/woggy/TrackingPanels",
+  "updateUrl": "https://github.com/woggy/TrackingPanels/releases",
+  "authorList": ["woggy"],
+  "credits": "woggy",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
