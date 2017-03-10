@@ -36,9 +36,10 @@ public class SmallPanelRenderer extends TileEntitySpecialRenderer
 
         //Make sure it's pointed the right direction
         GL11.glPushMatrix();
-        //GL11.glTranslatef(0.5F, 0, 0.5F);
-        //This line actually rotates the renderer.
+        GL11.glTranslatef(0F, 2F, 0F);
         GL11.glRotatef(90F, 0F, 1F, 0F);
+        
+        GL11.glRotatef(((BlockSmallPanelTileEntity)te).angle, 1F, 0F, 0F);
         //GL11.glTranslatef(-0.5F, 0, -0.5F);
          
         //A reference to your Model file. Again, very important.

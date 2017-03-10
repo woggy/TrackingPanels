@@ -28,7 +28,7 @@ public class BlockAxle extends Block implements ITileEntityProvider
 		this.setResistance(5.0F);
 		this.setStepSound(soundTypePiston);
 		this.setHarvestLevel("pickaxe", 1);
-		super.setBlockBounds(0.375f, 0.375f, 0, 0.625f, 0.625f, 1);
+		super.setBlockBounds(0.375f, 0.375f, 0, 0.625f, 1, 1);
 	}
 	
 	public TileEntity createNewTileEntity(World world, int meta)

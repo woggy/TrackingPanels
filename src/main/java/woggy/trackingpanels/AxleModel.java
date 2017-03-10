@@ -15,10 +15,10 @@ public class AxleModel extends ModelBase
     textureHeight = 32;
     
       axle = new ModelRenderer(this, 0, 0);
-      axle.addBox(0F, 0F, 0F, 16, 4, 4);
-      axle.setRotationPoint(-8F, 14F, -2F);
+      axle.addBox(-8F, -8F, -2F, 16, 10, 4);
+      axle.setRotationPoint(0F, 0F, 0F);
       axle.setTextureSize(64, 32);
-      axle.mirror = true;
+      axle.mirror = false;
       setRotation(axle, 0F, 0F, 0F);
   }
   

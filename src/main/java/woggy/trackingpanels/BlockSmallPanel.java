@@ -26,7 +26,7 @@ public class BlockSmallPanel extends Block implements ITileEntityProvider
 		this.setResistance(5.0F);
 		this.setStepSound(soundTypePiston);
 		this.setHarvestLevel("pickaxe", 0);
-		super.setBlockBounds(0, -0.375f, 0, 1, -0.25f, 1);
+		super.setBlockBounds(0, 0, 0, 1, 0.125f, 1);
 	}
 	
 	public TileEntity createNewTileEntity(World world, int meta)

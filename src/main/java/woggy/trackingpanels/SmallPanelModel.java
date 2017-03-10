@@ -15,8 +15,8 @@ public class SmallPanelModel extends ModelBase
     textureHeight = 32;
     
       panel = new ModelRenderer(this, 0, 0);
-      panel.addBox(0F, 0F, 0F, 16, 2, 16);
-      panel.setRotationPoint(-8F, 28F, -8F);
+      panel.addBox(-8F, -8F, -8F, 16, 2, 16);
+      panel.setRotationPoint(0F, -2F, 0F);
       panel.setTextureSize(64, 32);
       panel.mirror = true;
       setRotation(panel, 0F, 0F, 0F);
@@ -39,6 +39,7 @@ public class SmallPanelModel extends ModelBase
   public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
   {
     super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+    this.panel.rotateAngleX = f;
   }
 
 }
