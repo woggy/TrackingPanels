@@ -15,7 +15,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class BlockSmallPanel extends Block implements ITileEntityProvider
-{	
+{		
 	public BlockSmallPanel()
 	{
 		super(Material.glass);
@@ -75,9 +75,40 @@ public class BlockSmallPanel extends Block implements ITileEntityProvider
 	    if(world.getBlock(i,j-1,k) == PanelCore.blockAxle)
 	    	return;
 	    
-	    //Nope. Drop self.
+	    //Nope. Unregister in root block and drop self.
+	    int offset = BlockSmallPanel.findRootBlockOffset(world, i, j, k);
+	    if(offset != 0)
+	    {
+	    	TileEntity te = world.getTileEntity(i, j-1, k+offset);
+	    	((BlockAxleMountTileEntity) te).unregisterPanel(offset);
+	    }
+	    
 	    this.dropBlockAsItem(world, i, j, k, new ItemStack(PanelCore.itemSmallPanel));
         world.setBlockToAir(i, j, k);
         world.removeTileEntity(i, j, k);
+	}
+	
+	@Override
+	public void breakBlock(World world, int i, int j, int k, Block brokenBlock, int meta)
+	{
+		super.breakBlock(world, i, j, k, brokenBlock, meta);
+		
+		//Make sure the root block forgets about us.
+		int offset = BlockSmallPanel.findRootBlockOffset(world, i, j, k);
+	    if(offset != 0)
+	    {
+	    	TileEntity te = world.getTileEntity(i, j-1, k+offset);
+	    	((BlockAxleMountTileEntity) te).unregisterPanel(offset);
+	    }	
+	}
+	
+	public static int findRootBlockOffset(World world, int i, int j, int k)
+	{
+		for(int offset = -BlockAxle.numAxles; offset <= BlockAxle.numAxles ; offset++)
+		{
+			if(world.getBlock(i, j-1, k+offset) == PanelCore.blockAxleMount)
+				return offset;
+		}
+		return 0;	//should only happen when breaking a panel whose root has already been broken.
 	}
 }

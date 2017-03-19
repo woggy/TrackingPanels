@@ -1,8 +1,15 @@
 package woggy.trackingpanels;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
+import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -11,6 +18,7 @@ public class BlockAxleMountTileEntity extends TileEntity implements IEnergyProvi
 	protected EnergyStorage storage;
 	private int delay;
 	private int rate;
+	private Map<Integer, Integer> panelMap = new HashMap<Integer, Integer>();
 	
 	
 	public BlockAxleMountTileEntity()
@@ -26,18 +34,31 @@ public class BlockAxleMountTileEntity extends TileEntity implements IEnergyProvi
 		if(Util.tickRate(this.getWorldObj(), 20, delay))
 		{
 			rate = 0;
-			for(int i=-4;i<5;i++)
-				if(this.getWorldObj().getBlock(this.xCoord, this.yCoord+1, this.zCoord+i) == PanelCore.blockSmallPanel)
-				{
-					float angle = Util.getSunAngle(this.getWorldObj());
-					if(angle > -90 || angle < -270)
-						if(Util.checkSightline(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord+i))
-							rate++;
-				}
+			float angle = Util.getSunAngle(this.getWorldObj());
+			if(angle > -90 || angle < -270)
+				for(int key : panelMap.keySet())
+					if(Util.checkSightline(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord-key))
+						rate += panelMap.get(key);
 		}
 		
-		//System.out.println(rate);
 		storage.receiveEnergy(rate, false);
+		
+		if(storage.getEnergyStored() > 0)
+		{
+			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+			{
+				if(canConnectEnergy(dir))
+				{
+					TileEntity tile = this.getWorldObj().getTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
+					if(tile instanceof IEnergyReceiver)
+					{
+						int availableEnergy = storage.extractEnergy(storage.getMaxExtract(), true);
+						int energyMoved = ((IEnergyReceiver) tile).receiveEnergy(dir.getOpposite(), availableEnergy, false);
+						storage.extractEnergy(energyMoved, false);
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -45,7 +66,11 @@ public class BlockAxleMountTileEntity extends TileEntity implements IEnergyProvi
 	{
 		super.readFromNBT(nbt);
 		storage.readFromNBT(nbt);
-        nbt.setInteger("rate", this.rate);
+		NBTTagCompound nbtPanelMap = nbt.getCompoundTag("panelMap");
+		for (Object key : nbtPanelMap.func_150296_c())	//func_150296_c returns the keyset.
+		{
+			panelMap.put(Integer.parseInt((String)key), nbtPanelMap.getInteger((String)key));
+		}
 	}
 
 	@Override
@@ -53,7 +78,28 @@ public class BlockAxleMountTileEntity extends TileEntity implements IEnergyProvi
 	{
 		super.writeToNBT(nbt);
 		storage.writeToNBT(nbt);
-		rate = nbt.getInteger("rate");
+		NBTTagCompound nbtPanelMap = new NBTTagCompound();
+		for(Integer key: panelMap.keySet())
+		{
+			nbtPanelMap.setInteger(key.toString(), panelMap.get(key));
+		}
+        nbt.setTag("panelMap", nbtPanelMap);
+	}	
+	
+	//Methods for syncing server & client NBT data.
+	@Override
+	public Packet getDescriptionPacket()
+	{
+		NBTTagCompound nbt = new NBTTagCompound();
+		writeToNBT(nbt);
+		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbt);
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager manager, S35PacketUpdateTileEntity packet) {
+		super.onDataPacket(manager, packet);
+		NBTTagCompound nbt = packet.func_148857_g();
+		readFromNBT(nbt);
 	}
 
 	/* IEnergyConnection */
@@ -67,7 +113,6 @@ public class BlockAxleMountTileEntity extends TileEntity implements IEnergyProvi
 	@Override
 	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate)
 	{
-		System.out.println("test? Attempting to extract " + maxExtract + " RF.");
 		return storage.extractEnergy(maxExtract, simulate);
 	}
 
@@ -82,6 +127,16 @@ public class BlockAxleMountTileEntity extends TileEntity implements IEnergyProvi
 	public int getMaxEnergyStored(ForgeDirection from)
 	{
 		return storage.getMaxEnergyStored();
+	}
+	
+	public void registerPanel (int offset, int panelSize)
+	{
+		panelMap.put(offset, panelSize);
+	}
+
+	public void unregisterPanel(int offset)
+	{
+		panelMap.remove(offset);
 	}
 
 }

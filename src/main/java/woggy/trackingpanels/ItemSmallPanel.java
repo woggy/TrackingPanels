@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class ItemSmallPanel extends Item
@@ -27,6 +28,11 @@ public class ItemSmallPanel extends Item
 			if(rootBlock == PanelCore.blockAxle)
 			{	
 				world.setBlock(x, y+1, z, PanelCore.blockSmallPanel, 0, 3);
+				
+			    int offset = BlockSmallPanel.findRootBlockOffset(world, x, y+1, z);
+			    TileEntity te = world.getTileEntity(x, y, z+offset);
+			    ((BlockAxleMountTileEntity) te).registerPanel(offset,1);
+			    
 				world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), 
 						PanelCore.blockSmallPanel.stepSound.func_150496_b(), (PanelCore.blockSmallPanel.stepSound.getVolume() + 1.0F) / 2.0F, PanelCore.blockSmallPanel.stepSound.getPitch() * 0.8F);
 				items.stackSize--;
