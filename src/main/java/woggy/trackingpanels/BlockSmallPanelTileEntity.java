@@ -30,7 +30,7 @@ public class BlockSmallPanelTileEntity extends TileEntity
 	@SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox()
     {
-        AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(xCoord-1, yCoord-1, zCoord, xCoord + 1, yCoord, zCoord+1);
+        AxisAlignedBB bb = AxisAlignedBB.getBoundingBox(xCoord-1, yCoord-1, zCoord, xCoord + 2, yCoord+.0125f, zCoord+1);
         return bb;
     }
 }
