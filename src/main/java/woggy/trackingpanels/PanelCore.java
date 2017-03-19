@@ -29,6 +29,7 @@ public class PanelCore
     public static Block blockSmallPanel;
     public static Block blockAxle;
     public static Block blockAxleMount;
+    public static Block blockInvisible;
     
     public static Item itemAxle;
     public static Item itemSmallPanel;
@@ -97,6 +98,8 @@ public class PanelCore
     	GameRegistry.registerBlock(blockAxle, "BlockAxle");
     	blockAxleMount = new BlockAxleMount();
     	GameRegistry.registerBlock(blockAxleMount, "BlockAxleMount");
+    	blockInvisible = new BlockInvisible();
+    	GameRegistry.registerBlock(blockInvisible, "BlockInvisible");
     	
     	itemAxle = new ItemAxle();
     	GameRegistry.registerItem(itemAxle, "ItemAxle");
