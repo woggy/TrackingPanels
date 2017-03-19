@@ -7,24 +7,20 @@ import net.minecraft.util.AxisAlignedBB;
 
 public class BlockSmallPanelTileEntity extends TileEntity 
 {
-	public int delay=0;
-	public float angle;
+	float angle;
 	
 	public void updateEntity()
 	{
-		if(delay>0)
+		if(Util.tickRate(this.getWorldObj(), 20))
 		{
-			delay--;
-			return;
+			angle = Util.getSunAngle(this.getWorldObj());
+			if(angle < -90 && angle >= -105)
+				angle = -90;
+			if(angle < -135 && angle > -270)
+				angle = -270;
+			if(angle < -105 && angle > -135)
+				angle = -6*(angle+105) - 90;
 		}
-		delay=20;
-		angle = this.getWorldObj().getCelestialAngle(0)*-360;
-		if(angle < -90 && angle >= -105)
-			angle = -90;
-		if(angle < -135 && angle > -270)
-			angle = -270;
-		if(angle < -105 && angle > -135)
-			angle = -6*(angle+105) - 90;
 	}
 	
 	@SideOnly(Side.CLIENT)

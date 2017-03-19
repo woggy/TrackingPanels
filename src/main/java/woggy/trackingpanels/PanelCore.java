@@ -85,6 +85,8 @@ public class PanelCore
 
     	ClientRegistry.bindTileEntitySpecialRenderer(BlockSmallPanelTileEntity.class, new SmallPanelRenderer());
     	GameRegistry.registerTileEntity(BlockSmallPanelTileEntity.class, "smallPanel");
+    	
+    	GameRegistry.registerTileEntity(BlockAxleMountTileEntity.class, "axleMount");
     }
     
     public void itemAndBlockRegistration()

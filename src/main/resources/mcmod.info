@@ -1,7 +1,7 @@
 [
 {
   "modid": "trackingpanels",
-  "name": "TrackingPanels",
+  "name": "Tracking Panels",
   "description": "Sun-tracking solar arrays",
   "version": "0.1",
   "mcversion": "10.13.4.1558-1.7.10",

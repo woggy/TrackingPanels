@@ -3,11 +3,14 @@ package woggy.trackingpanels;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
-public class BlockAxleMount extends Block
+public class BlockAxleMount extends Block implements ITileEntityProvider
 {	
 	@SideOnly(Side.CLIENT)
 	private IIcon sideTexture, topTexture;
@@ -22,6 +25,11 @@ public class BlockAxleMount extends Block
 		this.setResistance(5.0F);
 		this.setStepSound(soundTypePiston);
 		this.setHarvestLevel("pickaxe", 1);
+	}
+	
+	public TileEntity createNewTileEntity(World world, int meta)
+	{
+		return new BlockAxleMountTileEntity();
 	}
 	
 	@SideOnly(Side.CLIENT)
