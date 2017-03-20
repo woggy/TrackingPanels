@@ -35,7 +35,6 @@ public class BlockAxleMountTileEntity extends TileEntity implements IEnergyProvi
 		{
 			rate = 0;
 			float angle = Util.getSunAngle(this.getWorldObj());
-			System.out.println(angle);
 			if(angle > -90 || angle < -270)
 			{
 				for(int key : panelMap.keySet())
