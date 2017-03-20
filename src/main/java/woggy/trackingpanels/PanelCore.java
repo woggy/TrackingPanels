@@ -3,9 +3,12 @@ package woggy.trackingpanels;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraft.item.ItemStack;
+//import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -60,23 +63,14 @@ public class PanelCore
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-    	if(!OreDictionary.doesOreNameExist("ingotSteel"))
-    		System.out.println("Steel ingots not found in oredict!");
-    	else
-    		System.out.println("Steel ingots found in oredict!");
+//    	if(!OreDictionary.doesOreNameExist("ingotSteel"))
+//    		System.out.println("Steel ingots not found in oredict. Some recipes may not work!");
 		if(!OreDictionary.doesOreNameExist("ingotCopper"))
-			System.out.println("Copper ingots not found in oredict!");
-    	else
-    		System.out.println("Copper ingots found in oredict!");
-		if(!(OreDictionary.doesOreNameExist("ingotAluminum") ||
-			  OreDictionary.doesOreNameExist("ingotAluminium")))
-			System.out.println("Aluminum ingots not found in oredict!");
-    	else
-    		System.out.println("Aluminum ingots found in oredict!");
-		if(!FluidRegistry.isFluidRegistered("steam"))
-			System.out.println("Steam fluid not found in fluid registry!");
-    	else
-    		System.out.println("Steam fluid found in fluid registry!");
+			System.out.println("Copper ingots not found in oredict. Some recipes may not work!");
+		if(!OreDictionary.doesOreNameExist("ingotAluminum"))
+			System.out.println("Aluminum ingots not found in oredict. Some recipes may not work!");
+//		if(!FluidRegistry.isFluidRegistered("steam"))
+//			System.out.println("Steam fluid not found in fluid registry. Some recipes may not work!");
     }
     
     public void tileEntityRegistration()
@@ -109,6 +103,12 @@ public class PanelCore
     
     public void addRecipes()
     {
+    	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemAxle), "aca", 'a', "ingotAluminum", 'c', "ingotCopper"));
     	
+    	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockAxleMount), "iai", "ara", "iai",
+				'a', "ingotAluminum", 'r', "blockRedstone", 'i', "ingotIron"));
+    	
+    	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemSmallPanel), "ppp", "lrl", "aca",
+    			'a', "ingotAluminum", 'c', "ingotCopper", 'l', new ItemStack(Items.dye, 1, 4), 'p', "paneGlass", 'r', "dustRedstone"));
     }
 }
