@@ -25,17 +25,19 @@ public class PanelCore
     public static final String MODNAME = "@NAME@";
     public static final String VERSION = "@VERSION@";
 
+    public static final int numTiers = 1;
     
     @Instance(value = PanelCore.MODID)
     public static PanelCore instance;
     
-    public static Block blockSmallPanel;
-    public static Block blockAxle;
     public static Block blockAxleMount;
     public static Block blockInvisible;
     
     public static Item itemAxle;
-    public static Item itemSmallPanel;
+    public static Block blockAxle;
+    
+    public static Item[] itemSmallPanel;
+    public static Block[] blockSmallPanel;
 
     public static final CreativeTabs creativeTab = new CreativeTabs("TrackingPanels")
     {
@@ -86,20 +88,26 @@ public class PanelCore
     
     public void itemAndBlockRegistration()
     {
-    	blockSmallPanel = new BlockSmallPanel();
-    	GameRegistry.registerBlock(blockSmallPanel, "BlockSmallPanel");
+    	itemAxle = new ItemAxle();
+    	GameRegistry.registerItem(itemAxle, "ItemAxle");
     	blockAxle = new BlockAxle();
     	GameRegistry.registerBlock(blockAxle, "BlockAxle");
+    	
     	blockAxleMount = new BlockAxleMount();
     	GameRegistry.registerBlock(blockAxleMount, "BlockAxleMount");
     	blockInvisible = new BlockInvisible();
     	GameRegistry.registerBlock(blockInvisible, "BlockInvisible");
     	
-    	itemAxle = new ItemAxle();
-    	GameRegistry.registerItem(itemAxle, "ItemAxle");
-    	itemSmallPanel = new ItemSmallPanel();
-    	GameRegistry.registerItem(itemSmallPanel, "ItemSmallPanel");
-    }
+    	itemSmallPanel = new Item[numTiers];
+    	blockSmallPanel = new Block[numTiers];
+    	for(int i=0;i<numTiers;i++)
+    	{
+    		itemSmallPanel[i] = new ItemSmallPanel(i);
+    		GameRegistry.registerItem(itemSmallPanel[i], "ItemSmallPanel");
+        	blockSmallPanel[i] = new BlockSmallPanel(i);
+        	GameRegistry.registerBlock(blockSmallPanel[i], "BlockSmallPanel");
+    	}
+	}
     
     public void addRecipes()
     {
@@ -108,7 +116,7 @@ public class PanelCore
     	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockAxleMount), "iai", "ara", "iai",
 				'a', "ingotAluminum", 'r', "blockRedstone", 'i', "ingotIron"));
     	
-    	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemSmallPanel), "ppp", "lrl", "aca",
+    	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemSmallPanel[0]), "ppp", "lrl", "aca",
     			'a', "ingotAluminum", 'c', "ingotCopper", 'l', new ItemStack(Items.dye, 1, 4), 'p', "paneGlass", 'r', "dustRedstone"));
     }
 }

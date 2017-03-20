@@ -25,7 +25,7 @@ public class SmallPanelRenderer extends TileEntitySpecialRenderer
         //This is setting the initial location.
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
         //This is the texture of your block. It's pathed to be the same place as your other blocks here.
-        ResourceLocation textures = (new ResourceLocation("trackingpanels:textures/blocks/block.smallPanel.png")); 
+        ResourceLocation textures = (new ResourceLocation("trackingpanels:textures/blocks/block.smallPanel"+((BlockSmallPanelTileEntity)te).tier+".png")); 
         //the ':' is very important
         //binding the textures
         Minecraft.getMinecraft().renderEngine.bindTexture(textures);

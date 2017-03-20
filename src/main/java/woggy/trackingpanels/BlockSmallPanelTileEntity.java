@@ -6,6 +6,13 @@ import net.minecraft.util.AxisAlignedBB;
 
 public class BlockSmallPanelTileEntity extends BlockPanelTileEntity 
 {	
+	int tier;
+	
+	public BlockSmallPanelTileEntity(int tier)
+	{
+		this.tier = tier;
+	}
+	
 	@SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox()
     {

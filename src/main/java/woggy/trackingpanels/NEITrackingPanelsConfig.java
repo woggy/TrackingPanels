@@ -21,6 +21,8 @@ public class NEITrackingPanelsConfig implements IConfigureNEI
 	{
 		API.hideItem(new ItemStack(PanelCore.blockInvisible));
 		API.hideItem(new ItemStack(PanelCore.blockAxle));
-		API.hideItem(new ItemStack(PanelCore.blockSmallPanel));
+		
+		for(int i=0;i<PanelCore.numTiers;i++)
+			API.hideItem(new ItemStack(PanelCore.blockSmallPanel[i]));
 	}
 }

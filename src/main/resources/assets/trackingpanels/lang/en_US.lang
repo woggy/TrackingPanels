@@ -1,8 +1,9 @@
 itemGroup.TrackingPanels=Tracking Panels
 
-tile.smallPanel.name=Small Solar Panel
 tile.axleMount.name=Axle Mount
-tile.axle.name=Axle
 
 item.itemAxle.name=Axle
-item.itemSmallPanel.name=Small Solar Panel
+tile.axle.name=Axle
+
+item.itemSmallPanel0.name=Small Solar Panel
+tile.smallPanel0.name=Small Solar Panel

@@ -15,22 +15,25 @@ public class BlockSmallPanel extends BlockPanel implements ITileEntityProvider
 	private static int[] yOffset = {-1,0,0,-1};
 	private static int bufferBlocks = xOffset.length;
 	
-	public BlockSmallPanel()
+	private int tier;
+	
+	public BlockSmallPanel(int tier)
 	{
 		super();
-		this.setBlockName("smallPanel");
-		this.setBlockTextureName("trackingpanels:block.smallPanel.break");
+		this.setBlockName("smallPanel"+tier);
+		this.setBlockTextureName("trackingpanels:block.smallPanel"+tier+".break");
 		super.setBlockBounds(0, 0, 0, 1, 0.125f, 1);
+		this.tier = tier;
 	}
 	
 	public TileEntity createNewTileEntity(World world, int meta)
 	{
-		return new BlockSmallPanelTileEntity();
+		return new BlockSmallPanelTileEntity(tier);
 	}
     
     public Item getItemDropped(int meta, Random foo, int bar)
     {
-    	return PanelCore.itemSmallPanel;
+    	return PanelCore.itemSmallPanel[tier];
     }
     
 	@Override
@@ -41,7 +44,7 @@ public class BlockSmallPanel extends BlockPanel implements ITileEntityProvider
 	    	return;
 	    
 	    //Nope. Unregister in root block and drop self.    
-	    this.dropBlockAsItem(world, x,y,z, new ItemStack(PanelCore.itemSmallPanel));
+	    this.dropBlockAsItem(world, x,y,z, new ItemStack(PanelCore.itemSmallPanel[tier]));
 	    super.breakBlock(world, x, y, z, block, 0);
         world.setBlockToAir(x,y,z);
 	}
