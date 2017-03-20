@@ -17,7 +17,7 @@ public class BlockAxleMountTileEntity extends TileEntity implements IEnergyProvi
 {
 	protected EnergyStorage storage;
 	private int delay;
-	private int rate;
+	private float rate;
 	private Map<Integer, Integer> panelMap = new HashMap<Integer, Integer>();
 	
 	
@@ -35,13 +35,29 @@ public class BlockAxleMountTileEntity extends TileEntity implements IEnergyProvi
 		{
 			rate = 0;
 			float angle = Util.getSunAngle(this.getWorldObj());
+			System.out.println(angle);
 			if(angle > -90 || angle < -270)
+			{
 				for(int key : panelMap.keySet())
-					if(Util.checkSightline(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord-key))
+					if(this.getWorldObj().canBlockSeeTheSky(this.xCoord, this.yCoord+1, this.zCoord-key))
 						rate += panelMap.get(key);
+			}
+			
+			//adjustment for late evening
+			if((-90 < angle) && (angle < -60))
+				rate *= (angle+120)/60;
+			//adjustment for early morning
+			if((-270 > angle) && (angle > -300))
+				rate *= -(angle+240)/60;
+			
+			//adjustment for weather
+			if(this.getWorldObj().isRaining())
+				rate *= 0.4;
+			if(this.getWorldObj().isThundering())
+				rate *= 0.4;
 		}
 		
-		storage.receiveEnergy(rate, false);
+		storage.receiveEnergy(Math.round(rate), false);
 		
 		if(storage.getEnergyStored() > 0)
 		{

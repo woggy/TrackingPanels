@@ -18,10 +18,4 @@ public class Util
 	{
 		return tickRate(world, numTicks, 0);
 	}
-
-	public static boolean checkSightline(World worldObj, int xCoord, int yCoord, int i) 
-	{
-		// TODO Auto-generated method stub
-		return true;
-	}
 }
